@@ -1,0 +1,5 @@
+Create Action-এর Rule
+✅ Action Name খালি হতে পারবে না।
+✅ Duration অবশ্যই Number হবে।
+✅ Duration 0-এর বেশি হতে হবে।
+🔜 ভুল Input দিলে আবার Input চাইবে।
