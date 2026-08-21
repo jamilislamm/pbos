@@ -1834,36 +1834,88 @@ For example, changing today's Habit Target must not modify yesterday's execution
 
 ---
 
-# 72. Database Technology Decision
+# 72. Persistence Technology
 
-This document intentionally does **not** choose:
+PBOS Version 1 uses a hybrid local-first persistence architecture.
 
-```text
-SQLite
-PostgreSQL
-IndexedDB
+### Canonical Database
+
+Supabase/PostgreSQL is the canonical long-term persistent database.
+
+It stores durable PBOS data including:
+
+- Habits
+- Daily Habit Executions
+- Goals
+- Life Domains
+- Projects
+- Roadmaps
+- Next Actions
+- Sessions
+- Reflections
+- historical records
+- domain relationships
+
+### Local Persistence
+
+IndexedDB is used by the Web application as local operational
+persistence.
+
+Its responsibilities include:
+
+- offline operation
+- active Session protection
+- local execution state
+- pending changes
+- synchronization queue
+- fast local reads/writes where appropriate
+
+### Synchronization
+
+A dedicated synchronization layer is responsible for exchanging
+changes between IndexedDB and Supabase/PostgreSQL.
+
+The UI must not communicate directly with either persistence provider.
+
+The application layer communicates with the persistence boundary.
+
+Conceptually:
+
+Web UI
+↓
+Application Logic
+↓
+Persistence Boundary
+├── Local Persistence Adapter
+│ ↓
+│ IndexedDB
+│
+└── Remote Persistence Adapter
+↓
 Supabase
-Firebase
-MongoDB
-etc.
-```
+↓
+PostgreSQL
 
-The decision belongs to the technical implementation phase.
+### Historical Integrity
 
-The selection must consider:
+Historical records must represent what actually happened.
 
-- local-first requirements
-- reliability
-- relational complexity
-- offline behavior
-- synchronization requirements
-- deployment requirements
-- scale
-- cost
-- AI-assisted development
-- maintainability
+Changes to current configuration must not silently rewrite historical
+execution records.
 
-The logical data model must remain valid regardless of the final technology.
+### Active Session Integrity
+
+An active Session must remain recoverable even when network connectivity
+is temporarily unavailable.
+
+### Conflict Handling
+
+Single-device operation is the primary Version 1 use case.
+
+Multi-device conflict resolution must not be implemented speculatively.
+
+A formal conflict strategy is required before enabling simultaneous
+multi-device editing.
 
 ---
 

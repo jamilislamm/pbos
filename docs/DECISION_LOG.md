@@ -383,3 +383,229 @@ If **yes**, proceed.
 If **no**, stop and document the architectural decision before implementation.
 
 ---
+
+## ADR-001 — Resolve architecture document names and stage ordering
+
+Date: 2026-08-21
+Status: Accepted
+
+Context:
+The documents refer to `PBOS_*` filenames, but this repository stores the
+same documents without that prefix. `ARCHITECTURE.md` also describes UI/UX as
+Step 5 and technical architecture as Step 6, while the available staged
+documents label System Architecture Step 5, Data Architecture Step 6,
+Application Logic Step 7, and UI/UX Step 8.
+
+Decision:
+Treat the existing unprefixed files as the referenced architecture documents.
+For implementation reading order, use the available staged documents in their
+own declared sequence: domain and flows, system, data, application logic,
+UI/UX, development protocol, testing, and decision log.
+
+Reason:
+This preserves the detailed documents and does not change the execution model.
+The inconsistency is document ordering/naming only and does not block the
+foundation.
+
+Alternatives:
+Rename all documents or rewrite the high-level roadmap now.
+
+Consequences:
+Future work has one explicit reading order. The high-level roadmap should be
+reconciled in a documentation-focused task; no product behavior changes here.
+
+Related Architecture:
+`ARCHITECTURE.md`, `SYSTEM_ARCHITECTURE.md`, `DATA_ARCHITECTURE.md`,
+`APPLICATION_LOGIC.md`, and `UI_UX_ARCHITECTURE.md`.
+
+## ADR-002 — Defer storage technology until the application host is known
+
+Date: 2026-08-21
+Status: Accepted
+
+Context:
+PBOS requires durable, historical, relational, local-first-capable persistence,
+but the repository contains no application host, runtime, packaging, or
+deployment constraint. The data architecture explicitly leaves database
+technology open.
+
+Decision:
+Do not select or install a database technology during Phase 0. Establish the
+repository boundary and required persistence capabilities now; select a storage
+adapter when the first approved implementation unit defines the application
+host and validates offline, migration, and transaction needs.
+
+Reason:
+Selecting a browser-only, desktop-only, or remote database without a host
+would be technology-led architecture and could force an unnecessary redesign.
+
+Alternatives:
+Adopt SQLite, IndexedDB, or a managed remote database immediately.
+
+Consequences:
+No persistence implementation or dependency exists yet. The first persistence
+unit must record the concrete adapter decision and prove repository behavior,
+historical preservation, active-session integrity, and migration strategy.
+
+Related Architecture:
+`SYSTEM_ARCHITECTURE.md` §§16–20, 53–57 and `DATA_ARCHITECTURE.md` §72.
+
+## ADR-003 — Use native browser modules for the web-first Phase 0 shell
+
+Date: 2026-08-21
+Status: Accepted
+
+Context:
+PBOS is now explicitly web-first for desktop and mobile browsers. The
+repository has no existing runtime or package manager, and the local
+development environment does not provide Node.js. Phase 0 requires a runnable
+and testable web shell, not product features.
+
+Decision:
+Use standards-based HTML, CSS, and native browser ES modules for the Phase 0
+application shell. Use the Python standard library only to provide a local
+static development server and foundation checks. Keep shared utilities free of
+DOM and storage dependencies.
+
+Reason:
+This provides a responsive browser application with no dependency installation,
+build system, or framework coupling. It meets the immediate web requirement
+while preserving the domain/application boundary required for a future Android
+presentation layer.
+
+Alternatives:
+Adopt a JavaScript framework and build tool immediately, or wait for a Node.js
+runtime before creating a runnable shell.
+
+Consequences:
+The first domain/persistence unit can add only the tooling it demonstrably
+needs. Database selection remains a Phase 2 decision, now evaluated against
+the confirmed web host and local-first requirements.
+
+Related Architecture:
+`SYSTEM_ARCHITECTURE.md` §§37–40, 53–57; `UI_UX_ARCHITECTURE.md` §§60–63;
+and `IMPLEMENTATION_ROADMAP.md` Phase 0.
+
+## ADR-004 — Use Supabase/PostgreSQL as the Canonical Database with IndexedDB Local Persistence
+
+Date: 2026-08-22
+
+Status: Accepted
+
+Context:
+
+PBOS is a web-first application that must support reliable daily execution,
+historical records, relational domain data, future Android support, and
+local-first operation.
+
+The system contains execution-critical data such as:
+
+- Daily Habit Executions
+- Sessions
+- Next Actions
+- Reflections
+- historical records
+- Goals
+- Projects
+- relationships between domain entities
+
+A purely remote database would make core daily execution unnecessarily
+dependent on network availability.
+
+A purely browser-local database would make future cloud backup,
+multi-device usage, and Android synchronization significantly harder.
+
+SQLite was also considered, but the current Phase 0 host is a browser-based
+web application and introducing a browser-native SQLite architecture would
+add unnecessary hosting/runtime complexity at this stage.
+
+Decision:
+
+PBOS Version 1 will use a hybrid local-first persistence architecture.
+
+1. Supabase/PostgreSQL will be the canonical long-term persistent database.
+
+2. IndexedDB will provide browser-local persistence for operational data,
+   offline execution, active-session protection, local changes and sync
+   queueing.
+
+3. A dedicated synchronization boundary will synchronize local changes
+   with the canonical Supabase/PostgreSQL database.
+
+4. Core domain and application logic must not depend directly on either
+   IndexedDB or Supabase.
+
+5. Persistence adapters must remain behind the persistence boundary.
+
+6. The Web UI must not directly manipulate the database.
+
+7. Historical execution records must be preserved during synchronization
+   and must not be silently overwritten by configuration changes.
+
+8. Active Session integrity has priority over immediate cloud synchronization.
+   A temporary network failure must not cause an active Session or completed
+   execution to disappear.
+
+9. Conflict handling must be explicitly defined before multi-device
+   synchronization is enabled.
+
+Reason:
+
+This architecture satisfies PBOS's web-first requirement while preserving
+offline-capable daily execution and a future path toward Android and
+multi-device support.
+
+It also keeps the domain/application layers independent from the concrete
+storage technology.
+
+Alternatives considered:
+
+1. IndexedDB only:
+   Excellent browser-local operation, but weak for cloud backup,
+   multi-device support and future Android synchronization.
+
+2. SQLite only:
+   Strong relational storage, but introduces unnecessary runtime/hosting
+   complexity for the current browser-first Phase 0 environment.
+
+3. Supabase/PostgreSQL only:
+   Strong relational and cloud capabilities, but core daily execution
+   would become unnecessarily dependent on network availability.
+
+4. Supabase/PostgreSQL + IndexedDB:
+   Selected because it combines canonical cloud persistence with
+   local-first browser operation.
+
+Consequences:
+
+Positive:
+
+- Reliable offline-capable daily execution
+- Durable cloud persistence
+- Strong relational database
+- Future Android integration remains possible
+- Future multi-device support remains possible
+- Domain/application logic remains storage-independent
+
+Negative:
+
+- More complex than using a single database
+- A synchronization layer is required
+- Conflict handling must eventually be designed
+- Data consistency between local and remote storage must be tested carefully
+
+Implementation constraints:
+
+- Do not implement synchronization before the persistence model is defined.
+- Do not introduce multi-device conflict resolution in Version 1 unless required.
+- Do not allow UI components to directly access IndexedDB or Supabase.
+- The persistence layer must expose application-level operations rather
+  than storage-specific operations.
+
+Related Architecture:
+
+SYSTEM_ARCHITECTURE.md
+DATA_ARCHITECTURE.md
+APPLICATION_LOGIC.md
+UI_UX_ARCHITECTURE.md
+IMPLEMENTATION_ROADMAP.md

@@ -11,3 +11,20 @@
 | **Step 9**  | **Development Phases & AI-Agent Protocol**        | Antigravity-কে কীভাবে ধাপে ধাপে কাজ করাব                                             |
 | **Step 10** | **Testing, Validation & Definition of Done**      | প্রত্যেক phase কখন সম্পূর্ণ ধরা হবে                                                  |
 | **Step 11** | **Architecture Decision Log & Future Expansion**  | ভবিষ্যতে architecture পরিবর্তন হলে কীভাবে document হবে                               |
+
+## Development
+
+PBOS currently uses a dependency-free, web-first foundation. It can be run
+with the Python standard library:
+
+```powershell
+python scripts/serve.py
+```
+
+Open the printed local URL in a desktop or mobile browser. Run the foundation
+checks with:
+
+```powershell
+python -m unittest discover -s tests -p "test_*.py"
+powershell -ExecutionPolicy Bypass -File scripts/Test-Foundation.ps1
+```
