@@ -1,0 +1,147 @@
+/* PBOS - Screen-Specific Styles */
+
+.today-screen .section-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.today-screen .section-title:first-child {
+  margin-top: 0;
+}
+
+.active-session-banner {
+  background-color: var(--color-bg-elevated);
+  border: 2px solid var(--color-session-running);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+.active-session-banner .session-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+
+.active-session-banner .session-timer {
+  font-size: 2rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-session-running);
+  margin: var(--space-2) 0;
+}
+
+.habit-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  transition: box-shadow var(--transition-fast);
+}
+
+.habit-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.habit-card-info {
+  flex: 1;
+}
+
+.habit-card-title {
+  font-weight: 600;
+  color: var(--color-text-heading);
+}
+
+.habit-card-meta {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+.habit-card-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.session-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  text-align: center;
+}
+
+.session-screen .session-context {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-2);
+}
+
+.session-screen .session-work-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text-heading);
+  margin-bottom: var(--space-6);
+}
+
+.session-screen .session-timer-display {
+  font-size: 4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-heading);
+  margin-bottom: var(--space-2);
+}
+
+.session-screen .session-timer-target {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+.session-screen .session-controls {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.habits-screen .habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.projects-screen .projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.mindmap-screen .mindmap-canvas {
+  width: 100%;
+  height: 70vh;
+  background-color: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 768px) {
+  .session-screen .session-timer-display {
+    font-size: 3rem;
+  }
+  .session-screen .session-controls {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+  .session-screen .session-controls .btn {
+    width: 100%;
+  }
+}
