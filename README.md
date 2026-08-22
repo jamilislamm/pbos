@@ -1,30 +1,21 @@
-| Step        | কী লিখব                                           | উদ্দেশ্য                                                                             |
-| ----------- | ------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| **Step 1**  | **Project Foundation & Product Definition**       | PBOS কী, কেন, scope, principles, constraints                                         |
-| **Step 2**  | **Core Concepts & Domain Model**                  | Domain → Goal → Project → Roadmap → Node → Next Action → Session-এর exact definition |
-| **Step 3**  | **Functional Requirements**                       | Software কী কী করবে—প্রতিটি feature-এর behavior                                      |
-| **Step 4**  | **User Flows & State Machines**                   | User কোন অবস্থায় কী করবে, interruption/recovery/overtime ইত্যাদি                     |
-| **Step 5**  | **Information Architecture & UI/UX Architecture** | Screen, navigation, hierarchy, screen responsibility                                 |
-| **Step 6**  | **Technical Architecture & Data Model**           | frontend/backend, database, modules, data relationships                              |
-| **Step 7**  | **Implementation Architecture**                   | folder structure, modules, services, component boundaries                            |
-| **Step 8**  | **MVP Scope & Feature Dependencies**              | কোনটা আগে, কোনটার উপর কোন feature নির্ভর করছে                                        |
-| **Step 9**  | **Development Phases & AI-Agent Protocol**        | Antigravity-কে কীভাবে ধাপে ধাপে কাজ করাব                                             |
-| **Step 10** | **Testing, Validation & Definition of Done**      | প্রত্যেক phase কখন সম্পূর্ণ ধরা হবে                                                  |
-| **Step 11** | **Architecture Decision Log & Future Expansion**  | ভবিষ্যতে architecture পরিবর্তন হলে কীভাবে document হবে                               |
+সম্পূর্ণ হওয়া Phases✅
+| Phase | নাম | স্ট্যাটাস |
+| ----- | -------------------------------------- | --------- |
+| 0 | Foundation & Project Setup | ✅ |
+| 1 | Core Domain Foundation | ✅ |
+| 2 | Persistence & Data Layer | ✅ |
+| 3 | Habit System | ✅ |
+| 4 | Project / Roadmap / Next Action System | ✅ |
 
-## Development
-
-PBOS currently uses a dependency-free, web-first foundation. It can be run
-with the Python standard library:
-
-```powershell
-python scripts/serve.py
-```
-
-Open the printed local URL in a desktop or mobile browser. Run the foundation
-checks with:
-
-```powershell
-python -m unittest discover -s tests -p "test_*.py"
-powershell -ExecutionPolicy Bypass -File scripts/Test-Foundation.ps1
-```
+⏳ বাকি Phases
+| Phase | নাম | কী তৈরি হবে |
+| ------ | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| **5** | **Unified Session & Execution Engine** | Session screen (timer, start/pause/resume/complete), Session controls, Active session banner on Today |
+| **6** | **Today Operational Interface** | Real Today screen — habits, next actions, active session, recovery prompts |
+| **7** | **Reflection & Recovery** | Reflection form, Recovery flow, Post-session reflection |
+| **8** | **Goals, Life Domains & Cross-Domain Relationships** | Goal list, Life Domain list, Relationship linking |
+| **9** | **Mind Map & Relationship Visualization** | Roadmap mind-map canvas, Node visualization |
+| **10** | **History, Analytics & Insights** | History screen, Analytics, Pattern display |
+| **11** | **Complete UI/UX Integration** | Navigation polish, Settings, Modals (Create Habit, Create Project, etc.), Dark mode |
+| **12** | **Testing** | Test runner, Unit tests, Domain tests |
+| **13** | **Final Integration & Release** | PWA manifest, Cross-browser testing, Performance |

@@ -128,12 +128,46 @@ async function buildScreens() {
   habitDetailEl.id = "screen-habit-detail";
   container.appendChild(habitDetailEl);
 
-  // --- Projects Screen ---
-  const projectsEl = createPlaceholderScreen("projects", "Projects", "Phase 4");
+  // --- Projects Screen (REAL) ---
+  const projectsEl = document.createElement("div");
+  projectsEl.className = "screen";
+  projectsEl.dataset.screen = "projects";
+  projectsEl.id = "screen-projects";
   container.appendChild(projectsEl);
-  router.register("projects", () => {
+
+  router.register("projects", async () => {
     document.title = "Projects - PBOS";
+    projectsEl.innerHTML =
+      '<div class="loading-state"><p>Loading projects...</p></div>';
+
+    try {
+      const { ProjectsScreen } = await import("./screens/ProjectsScreen.js");
+      if (!screenInstances.projects) {
+        screenInstances.projects = new ProjectsScreen(appContext);
+      }
+      projectsEl.innerHTML = "";
+      const content = await screenInstances.projects.render();
+      projectsEl.appendChild(content);
+    } catch (err) {
+      console.error("[PBOS] Failed to load Projects screen:", err);
+      projectsEl.innerHTML = `
+        <div class="empty-state">
+          <h2>Error Loading Projects</h2>
+          <p>${err.message}</p>
+          <button class="btn btn-secondary" onclick="window.location.reload()">Reload</button>
+        </div>
+      `;
+    }
   });
+
+  // --- Project Detail Screen (REAL) ---
+  const projectDetailEl = document.createElement("div");
+  projectDetailEl.className = "screen";
+  projectDetailEl.dataset.screen = "project-detail";
+  projectDetailEl.id = "screen-project-detail";
+  container.appendChild(projectDetailEl);
+
+  // Dynamic route: #project/{id}
 
   // --- Mind Map Screen ---
   const mindmapEl = createPlaceholderScreen("mindmap", "Mind Map", "Phase 9");
@@ -218,6 +252,44 @@ async function handleDynamicRoutes() {
         </div>
       `;
     }
+  }
+  // Pattern: project/{id}
+  if (hash.startsWith("project/")) {
+    const projectId = hash.split("/")[1];
+    if (!projectId) return;
+
+    document
+      .querySelectorAll(".screen")
+      .forEach((el) => el.classList.remove("active"));
+
+    const detailEl = document.getElementById("screen-project-detail");
+    if (!detailEl) return;
+
+    detailEl.classList.add("active");
+    detailEl.innerHTML =
+      '<div class="loading-state"><p>Loading project...</p></div>';
+
+    try {
+      const { ProjectDetailScreen } =
+        await import("./screens/ProjectDetailScreen.js");
+      if (!screenInstances.projectDetail) {
+        screenInstances.projectDetail = new ProjectDetailScreen(appContext);
+      }
+      detailEl.innerHTML = "";
+      const content = await screenInstances.projectDetail.render(projectId);
+      detailEl.appendChild(content);
+      document.title = "Project Detail - PBOS";
+    } catch (err) {
+      console.error("[PBOS] Failed to load Project detail:", err);
+      detailEl.innerHTML = `
+        <div class="empty-state">
+          <h2>Error</h2>
+          <p>${err.message}</p>
+          <a href="#projects" class="btn btn-secondary">Back to Projects</a>
+        </div>
+      `;
+    }
+    return;
   }
 }
 
