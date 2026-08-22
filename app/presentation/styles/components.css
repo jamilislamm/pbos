@@ -235,3 +235,118 @@
   background-color: rgb(220 38 38 / 0.15);
   color: var(--color-danger);
 }
+
+/* ===== Habit Card ===== */
+.habit-level-select {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  margin-right: var(--space-2);
+  cursor: pointer;
+}
+
+.habit-level-select:focus {
+  border-color: var(--color-focus);
+  outline: none;
+}
+
+/* ===== Habit Detail Screen ===== */
+.habit-detail-header {
+  margin-bottom: var(--space-6);
+}
+
+.habit-detail-header h1 {
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.habit-description {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+}
+
+.habit-config-card .level-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.habit-config-card .level-row:last-child {
+  border-bottom: none;
+}
+
+.level-label {
+  font-weight: 600;
+  min-width: 80px;
+  color: var(--color-text-heading);
+}
+
+.level-value {
+  font-variant-numeric: tabular-nums;
+  min-width: 60px;
+}
+
+.level-desc {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.habit-today-card .progress-bar {
+  margin-bottom: var(--space-3);
+}
+
+.history-summary {
+  display: flex;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-date {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  min-width: 100px;
+}
+
+.history-status {
+  font-size: 0.875rem;
+}
+
+.history-duration {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+}
+
+.text-success {
+  color: var(--color-success);
+}
+.text-warning {
+  color: var(--color-warning);
+}
+.text-danger {
+  color: var(--color-danger);
+}
+.text-muted {
+  color: var(--color-text-muted);
+}
